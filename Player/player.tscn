@@ -21,9 +21,9 @@
 [ext_resource type="AudioStream" uid="uid://33doxfmqow48" path="res://Player/audio/damage/damage3.wav" id="16_lfmf2"]
 [ext_resource type="AudioStream" uid="uid://cuadgw73jlvrk" path="res://Player/audio/deathnoise.wav" id="17_pisgm"]
 [ext_resource type="AudioStream" uid="uid://bg2wfckckmd1b" path="res://Player/audio/wall slide/wall_slide.wav" id="19_o28un"]
-[ext_resource type="AudioStream" uid="uid://dxbg25enxurys" path="res://Player/audio/sword slash miss.wav" id="21_7emwf"]
 [ext_resource type="Texture2D" uid="uid://b6dx6xenc6u14" path="res://Player/Sprites/up_air.png" id="21_hshwv"]
 [ext_resource type="Texture2D" uid="uid://cp1ha41d70hya" path="res://Player/Sprites/up-ground.png" id="22_gpjlu"]
+[ext_resource type="AudioStream" uid="uid://nx0r4iaejb86" path="res://Player/audio/attacks/missed/sword_1.wav" id="24_8mwp6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i4o1l"]
 atlas = ExtResource("2_n471f")
@@ -634,20 +634,6 @@ tracks/1/keys = {
 "update": 1,
 "values": [0, 1, 2]
 }
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.133333),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"play_slash"
-}]
-}
 
 [sub_resource type="Animation" id="Animation_fhl08"]
 resource_name = "hurt"
@@ -963,20 +949,6 @@ tracks/1/keys = {
 "update": 1,
 "values": [0, 1, 2]
 }
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.133333),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"play_slash"
-}]
-}
 
 [sub_resource type="Animation" id="Animation_6pogt"]
 resource_name = "up_ground"
@@ -1004,20 +976,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [0, 1, 2]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.133333),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"play_slash"
-}]
 }
 
 [sub_resource type="Animation" id="Animation_i4o1l"]
@@ -1105,7 +1063,6 @@ texture_filter = 1
 position = Vector2(0, -17)
 sprite_frames = SubResource("SpriteFrames_00tjw")
 animation = &"jump"
-frame = 1
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -1182,8 +1139,7 @@ stream = ExtResource("19_o28un")
 
 [node name="Attack" type="AudioStreamPlayer2D" parent="."]
 scale = Vector2(1.28205, 1.28205)
-stream = ExtResource("21_7emwf")
-volume_db = -10.0
+stream = ExtResource("24_8mwp6")
 
 [connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]

@@ -243,17 +243,16 @@ func _physics_process(delta: float) -> void:
 	
 
 func handle_attack():
+	play_slash(attack_type)
 	toggle_damage_collisions(attack_type)
 
-	
-	
 
 func toggle_damage_collisions(type):
 	var damage_zone_collision: CollisionShape2D
 	if type == "forward":
 		damage_zone_collision = $ForwardAttackZone/CollisionShape2D
 		Game.playerDamageZone = $ForwardAttackZone
-	if type == "up":
+	if type == "up_air" or type == "up_ground":
 		damage_zone_collision = $UpAttackZone/CollisionShape2D
 		Game.playerDamageZone = $UpAttackZone
 	elif type == "down":
@@ -339,6 +338,7 @@ func play_footstep():
 	$Footsteps.stream = footsteps_sounds[index]
 	$Footsteps.play()
 
+
 var damage_sounds = [
 	preload("res://Player/audio/damage/damage1.wav"),
 	preload("res://Player/audio/damage/damage1.wav"),
@@ -359,31 +359,69 @@ func play_jump():
 		$Jump.volume_db = 0
 	$Jump.play()
 
+
 var wall_slides = [
 	preload("res://Player/audio/wall slide/wallslide1.wav"),
 	preload("res://Player/audio/wall slide/wallslide2.wav"),
 	preload("res://Player/audio/wall slide/wallslide3.wav"),
 	preload("res://Player/audio/wall slide/wallslide4.wav")
 ]
-
 func play_wall_slide():
 	var index = randi() % wall_slides.size()
 	$WallSlide.stream = wall_slides[index]
 	$WallSlide.play()
-	
-var sword_noise = [
-	preload("res://Player/audio/sword slash hit.wav"),
-	preload("res://Player/audio/sword slash miss.wav")
+
+
+
+
+var sword_missed = [
+	preload("res://Player/audio/attacks/missed/sword_1.wav"),
+	preload("res://Player/audio/attacks/missed/sword_2.wav"),
+	preload("res://Player/audio/attacks/missed/sword_3.wav"),
+	preload("res://Player/audio/attacks/missed/sword_4.wav"),
 ]
 
-func play_slash():
-	var index = 1
-	#add something to tell if the attack hit or not
-	if attack_success:
-		index=0
-		knockback_timer = 0.1
-	$Attack.stream = sword_noise[index]
-	$Attack.play()
+var hit_enemy = [
+	preload("res://Player/audio/attacks/hit enemies/hit.wav")
+]
+
+var hit_terrain = [
+	preload("res://Player/audio/attacks/hit terrain/hit_wood.wav"),
+	preload("res://Player/audio/attacks/hit terrain/metal_hit.wav")
+]
+
+func play_slash(type):
+	var terrain_hit = terrain_was_hit(type)
 	
+	if attack_success:
+		$Attack.stream = hit_enemy[0]
+		knockback_timer = 0.1
+	elif terrain_hit != -1:
+		$Attack.stream = hit_terrain[terrain_hit]
+	else:
+		var index = randi() % sword_missed.size()
+		$Attack.stream = sword_missed[index]
+
+	$Attack.play()
 	await get_tree().create_timer(0.1).timeout
 	attack_success = false
+
+
+func terrain_was_hit(type):
+	var bodies = $ForwardAttackZone.get_overlapping_bodies()
+	if type == "forward":
+		bodies = $ForwardAttackZone.get_overlapping_bodies()
+		print(bodies)
+	elif type == "up_air" or type == "up_ground":
+		bodies = $UpAttackZone.get_overlapping_bodies()
+		print(bodies)
+	elif type == "down":
+		bodies = $DownAttackZone.get_overlapping_bodies()
+		print(bodies)
+
+	for body in bodies:
+		if body.name == "WoodenStuff":
+			return 0
+		elif body.name == "MetalStuff":
+			return 1
+	return -1
