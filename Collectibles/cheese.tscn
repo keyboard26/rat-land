@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://djaqwkrejty4a"]
+
+[ext_resource type="Texture2D" uid="uid://bbeoc861j3nll" path="res://Collectibles/cheese.png" id="1_4sgct"]
+[ext_resource type="Script" uid="uid://3h7esek0qks" path="res://Collectibles/cheese.gd" id="1_7qair"]
+[ext_resource type="AudioStream" uid="uid://dd50af4osjnm" path="res://Collectibles/sounds/cheese_gulp.mp3" id="3_6shtk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7qair"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6shtk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_4sgct")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Cheese" type="Area2D"]
+script = ExtResource("1_7qair")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_7qair")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.722222, 0.722222)
+sprite_frames = SubResource("SpriteFrames_6shtk")
+
+[node name="CheeseGulp" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_6shtk")
+volume_db = -5.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

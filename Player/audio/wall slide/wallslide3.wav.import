@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dufs8kewe1do7"
+path="res://.godot/imported/wallslide3.wav-5e3f17db3b9e3da2fea63a321ff4c077.sample"
+
+[deps]
+
+source_file="res://Player/audio/wall slide/wallslide3.wav"
+dest_files=["res://.godot/imported/wallslide3.wav-5e3f17db3b9e3da2fea63a321ff4c077.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3 uid="uid://bgyouyej2liti"]
+
+[ext_resource type="Script" uid="uid://cswwjkuth1wsy" path="res://jellos.gd" id="2_5tt2m"]
+[ext_resource type="Script" uid="uid://df8c55gju8c0n" path="res://money.gd" id="3_mrqgh"]
+
+[sub_resource type="GDScript" id="GDScript_psafj"]
+script/source = "extends CanvasLayer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	visible = false
+
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed(\"toggle_inventory\"):
+		visible = !visible
+		get_tree().paused = visible
+"
+
+[node name="Inventory" type="CanvasLayer"]
+process_mode = 3
+script = SubResource("GDScript_psafj")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="ColorRect" type="ColorRect" parent="CenterContainer"]
+custom_minimum_size = Vector2(1080, 720)
+layout_mode = 2
+color = Color(0.423529, 0.529412, 0.545098, 1)
+
+[node name="Jellos" type="Label" parent="CenterContainer/ColorRect"]
+layout_mode = 2
+offset_left = 539.0
+offset_top = 252.0
+offset_right = 540.0
+offset_bottom = 275.0
+script = ExtResource("2_5tt2m")
+
+[node name="Money" type="Label" parent="CenterContainer/ColorRect"]
+layout_mode = 2
+offset_left = 539.0
+offset_top = 348.0
+offset_right = 540.0
+offset_bottom = 371.0
+script = ExtResource("3_mrqgh")

@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://cx6v5qrdeouvf"]
+
+[ext_resource type="Texture2D" uid="uid://jfq6gjd5dehp" path="res://BG Assets/QuietCabin/QC_BackGround 16x16.png" id="1_y81e4"]
+
+[node name="CabinBG" type="ParallaxBackground"]
+scroll_base_scale = Vector2(0.3, 0.3)
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+motion_mirroring = Vector2(1472.5, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer"]
+self_modulate = Color(1, 1, 1, 0.4)
+position = Vector2(736, 536.63)
+scale = Vector2(15.3438, 11.7245)
+texture = ExtResource("1_y81e4")
