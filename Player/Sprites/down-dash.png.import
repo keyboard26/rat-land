@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c481xcpqp827h"
-path="res://.godot/imported/hurt_flash.png-4fb2ce7499c978a1e89359f17440bbbd.ctex"
+uid="uid://bx73kc7ajg5e4"
+path="res://.godot/imported/down-dash.png-2468c2f8cd006a28383ea426265881f0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player/Sprites/hurt_flash.png"
-dest_files=["res://.godot/imported/hurt_flash.png-4fb2ce7499c978a1e89359f17440bbbd.ctex"]
+source_file="res://Player/Sprites/down-dash.png"
+dest_files=["res://.godot/imported/down-dash.png-2468c2f8cd006a28383ea426265881f0.ctex"]
 
 [params]
 

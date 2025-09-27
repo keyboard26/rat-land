@@ -7,8 +7,8 @@ var chase = false
 var player
 var player_can_attack = false
 var dead = false
-var health = 10
-var max_health = 10
+var health = 9
+var max_health = 9
 var is_roaming: bool
 var knockback_timer = 0.0
 var knockback_direction = 1

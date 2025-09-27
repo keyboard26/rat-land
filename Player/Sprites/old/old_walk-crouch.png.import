@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b1tna71icx3p7"
-path="res://.godot/imported/hurt.png-e96a39bc922cc3ae199ac680a07063da.ctex"
+uid="uid://ba8i6a3eiy1xe"
+path="res://.godot/imported/old_walk-crouch.png-bc8fa7cbb4f3c01e209a50fd664288fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player/Sprites/hurt.png"
-dest_files=["res://.godot/imported/hurt.png-e96a39bc922cc3ae199ac680a07063da.ctex"]
+source_file="res://Player/Sprites/old/old_walk-crouch.png"
+dest_files=["res://.godot/imported/old_walk-crouch.png-bc8fa7cbb4f3c01e209a50fd664288fc.ctex"]
 
 [params]
 

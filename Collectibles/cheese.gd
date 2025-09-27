@@ -11,7 +11,7 @@ func _on_body_exited(body: Node2D) -> void:
 		entered = false
 
 func _process(_delta: float) -> void:
-	if Input.is_key_pressed(KEY_C) and entered:
+	if Input.is_action_just_pressed("ui_up") and entered:
 		if Game.playerHP < Game.maxHP:
 			Game.playerHP += 1
 		play_gulp()

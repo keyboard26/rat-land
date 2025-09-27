@@ -1,10 +1,8 @@
 extends CharacterBody2D
 
-const DASH_SPEED = 500
-const CROUCH_SPEED = 150
+const DASH_SPEED = 450
 const SPEED = 200.0
-const JUMP_VELOCITY = -350.0
-const CROUCH_JUMP = -225.0
+const JUMP_VELOCITY = -400.0
 const WALL_SLIDE_GRAVITY = 75
 
 var is_wall_sliding = false
@@ -14,11 +12,11 @@ var wall_jump_pushback = 150
 var speed = SPEED
 var is_dashing = false
 var can_dash = true
+var down_dashing = false
 var dash_direction
 var knockback_timer = 0.0
 var knockback_direction = 1
 var is_dead = false
-var is_crouching = false
 var was_on_floor = false
 var fall_start_y = 0.0
 var is_hit = false
@@ -52,18 +50,21 @@ func _physics_process(delta: float) -> void:
 		is_hit = false
 		
 	# Add the gravity.
-	if not is_on_floor():
+	if not is_on_floor() and not down_dashing:
 		velocity += get_gravity() * delta
+	elif down_dashing:
+		velocity.y += 100
 
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		if is_crouching:
-			velocity.y = CROUCH_JUMP
-		else:
-			velocity.y = JUMP_VELOCITY
+		velocity.y = JUMP_VELOCITY
+	
+	if Input.is_action_just_released("ui_accept") and velocity.y < 0.0:
+		velocity.y *= 0.5 
+
 	
 	# Wall Jumping + Sliding
-	if is_on_wall() and not is_on_floor() and (Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_left")):
+	if is_on_wall_only() and not is_dashing and (Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_left")):
 		# have to be pushing left or right to wall slide
 		is_wall_sliding = true
 		$WallSlide.volume_db = 1
@@ -73,16 +74,16 @@ func _physics_process(delta: float) -> void:
 		is_wall_sliding = false
 	
 	
-	if is_on_wall() and Input.is_action_just_pressed("ui_accept"):
+	if is_on_wall_only() and Input.is_action_just_pressed("ui_accept"):
 		if Input.is_action_pressed("ui_right"):
 			# jump left from right wall
 			velocity.y = JUMP_VELOCITY
-			wall_jump_pushback = 100
+			wall_jump_pushback = 150
 			wall_jump = true
 		elif Input.is_action_pressed("ui_left"):
 			# jump right from left wall
 			velocity.y = JUMP_VELOCITY
-			wall_jump_pushback = -100
+			wall_jump_pushback = -150
 			wall_jump = true
 	
 	if wall_jump == true and wall_jump_timer <= 0:
@@ -97,8 +98,10 @@ func _physics_process(delta: float) -> void:
 	
 	
 	# stop falling if dashing
-	if is_dashing:
+	if is_dashing and not down_dashing:
 		velocity.y = 0
+	elif down_dashing:
+		velocity.x = 0
 	
 	
 	if knockback_timer >0:
@@ -127,51 +130,42 @@ func _physics_process(delta: float) -> void:
 				$"AnimatedSprite2D".flip_h = false
 				forward_attack_zone.scale.x = 1
 				
-		# Crouch logic
-		if Input.is_action_pressed("ui_down") and is_on_floor():
-			is_crouching = true
-		elif Input.is_action_just_released("ui_down"):
-			if try_uncrouch():
-				is_crouching = false
-			else:
-				is_crouching = true
-		elif not Input.is_action_just_pressed("ui_down"): 
-			if try_uncrouch():
-				is_crouching = false
-			else:
-				is_crouching = true
+
 		
 		
 		# Dash with a cooldown
 		if Input.is_key_pressed(KEY_X) and can_dash:
-			start_dash()
-		
-		if direction or is_dashing:
-			if is_crouching:
-				if is_dashing:
-					speed = DASH_SPEED * 0.75
-				else:
-					speed = CROUCH_SPEED
-				set_collision(20, 10, -10)
+			if Input.is_action_pressed("ui_down") and not is_on_floor():
+				start_down_dash()
 			else:
-				if is_dashing:
-					speed = DASH_SPEED
-				else:
-					speed = SPEED
-				set_collision(34, 10, -17)
-			
+				start_dash()
+		
+		if direction or is_dashing and not down_dashing:
 			if is_dashing:
+				speed = DASH_SPEED
+			else:
+				speed = SPEED
+			
+			if is_dashing and not down_dashing:
 				if is_wall_sliding:
 					dash_direction *= -1
 					direction = dash_direction
 				velocity.x = dash_direction * speed
 			else:
 				velocity.x = direction * speed
-
 		else:
 			velocity.x = move_toward(velocity.x, 0, speed)
 			
-	if !currently_attack and !is_wall_sliding and !is_crouching and !is_dashing and knockback_timer <= 0:
+	# to stop player from bouncing if they hit a wall while dashing
+	if is_dashing and is_on_wall() and dash_timer.time_left < 0.28:
+		dash_timer.emit_signal("timeout")
+	
+	if down_dashing and is_on_floor():
+		dash_timer.emit_signal("timeout")
+		
+	
+	
+	if !currently_attack and !is_wall_sliding  and !is_dashing and knockback_timer <= 0:
 		if Input.is_action_just_pressed("player_attack"):
 			currently_attack = true
 			if !is_on_floor() and Input.is_action_pressed("ui_down"):
@@ -193,7 +187,10 @@ func _physics_process(delta: float) -> void:
 	elif knockback_timer > 0:
 		anim.play("hurt flash")
 	elif is_dashing:
-		anim.play("dash")
+		if down_dashing:
+			anim.play("down-dash")
+		else:
+			anim.play("dash")
 	elif is_wall_sliding:
 		# had to switch to using this bc the jump/fall
 		#	animations would play over this
@@ -208,15 +205,9 @@ func _physics_process(delta: float) -> void:
 		else:
 			anim.play("fall")
 	elif abs(velocity.x) > 0:
-		if is_crouching:
-			anim.play("run-crouch")
-		else:
-			anim.play("run")		
+		anim.play("run")		
 	else:
-		if is_crouching:
-			anim.play("idle-crouch")
-		else:
-			anim.play("idle")
+		anim.play("idle")
 	
 	
 	
@@ -233,10 +224,6 @@ func _physics_process(delta: float) -> void:
 	
 	# Landing sound
 	if not was_on_floor and is_on_floor():
-		if is_crouching:
-			$LandingSounds.volume_db = -10
-		else:
-			$LandingSounds.volume_db = 0
 		$LandingSounds.play()
 		
 	was_on_floor = is_on_floor()
@@ -287,38 +274,27 @@ func start_dash():
 		else:
 			dash_direction = 1
 
+func start_down_dash():
+	is_dashing = true
+	down_dashing = true
+	can_dash = false
+	$WhooshSound.play()
+	dash_timer.start()
+	
+
 func _on_dash_timer_timeout() -> void:
 	is_dashing =false
+	down_dashing = false
 	dash_cooldown.start()
 
 func _on_dash_cooldown_timeout() -> void:
 	# flash so player knows when dash has cooled down
-	var tween = get_tree().create_tween()
-	tween.tween_property($"AnimatedSprite2D", "modulate:v", 1, 0.25).from(30)
+	#var tween = get_tree().create_tween()
+	#tween.tween_property($"AnimatedSprite2D", "modulate:v", 1, 0.25).from(30)
 	can_dash = true
 
 
-func try_uncrouch():	
-	#temporarily set collision shape to standing height
-	set_collision(34, 10, -17)
-	
-	var blocked = test_move(global_transform, Vector2.ZERO)
-	
-	if blocked:
-		#go back to crouching
-		set_collision(20, 10, -10)
-		is_crouching = true
-		return false
-	else:
-		#uncrouch
-		is_crouching = false
-		return true
-		
-# change collision shape when (un)crouching
-func set_collision(height:float, radius:float, y_offset: float) -> void:
-	$CollisionShape2D.shape.height = height
-	$CollisionShape2D.shape.radius = radius
-	$CollisionShape2D.position.y = y_offset
+
 
 
 
@@ -330,10 +306,7 @@ var footsteps_sounds = [
 	preload("res://Player/audio/steps/hero_fluke_bounce_9.wav")
 ]
 func play_footstep():
-	if is_crouching:
-		$Footsteps.volume_db = -8
-	else: 
-		$Footsteps.volume_db = 0
+	
 	var index = randi() % footsteps_sounds.size()
 	$Footsteps.stream = footsteps_sounds[index]
 	$Footsteps.play()
@@ -353,10 +326,6 @@ func play_damage():
 	$Damage.play()
 
 func play_jump():
-	if is_crouching:
-		$Jump.volume_db = -10
-	else: 
-		$Jump.volume_db = 0
 	$Jump.play()
 
 

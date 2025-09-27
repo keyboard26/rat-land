@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cp1whuxi6yje1"
-path="res://.godot/imported/jump-crouch.png-df68530db23f7962b003d6643bdf8e5f.ctex"
+uid="uid://c0b44vk8lxsce"
+path="res://.godot/imported/old_dash.png-af71dc0f2b8122fa9927aec310aa1dd2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player/Sprites/jump-crouch.png"
-dest_files=["res://.godot/imported/jump-crouch.png-df68530db23f7962b003d6643bdf8e5f.ctex"]
+source_file="res://Player/Sprites/old/old_dash.png"
+dest_files=["res://.godot/imported/old_dash.png-af71dc0f2b8122fa9927aec310aa1dd2.ctex"]
 
 [params]
 

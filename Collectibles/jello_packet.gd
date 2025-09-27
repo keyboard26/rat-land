@@ -15,7 +15,7 @@ func _on_body_exited(body: Node2D) -> void:
 		entered = false
 
 func _process(_delta: float) -> void:
-	if Input.is_key_pressed(KEY_C) and entered:
+	if Input.is_action_just_pressed("ui_up") and entered:
 		Game.jelloPackets += 1
 		if Game.jelloPackets == 3:
 			bigNoise = true
