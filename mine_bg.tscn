@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://doit05nknndid"]
+
+[ext_resource type="Texture2D" uid="uid://bxgg6kxkjosug" path="res://BG Assets/UndergroundMine/UM_BackGround 16x16.png" id="1_8p5ef"]
+
+[node name="MineBG" type="ParallaxBackground"]
+scroll_base_scale = Vector2(0.3, 0.3)
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+motion_mirroring = Vector2(1472.5, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer"]
+self_modulate = Color(1, 1, 1, 0.4)
+position = Vector2(736, 536.63)
+scale = Vector2(15.3438, 11.7245)
+texture = ExtResource("1_8p5ef")

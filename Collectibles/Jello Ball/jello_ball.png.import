@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dds7gx2qnw7kc"
-path="res://.godot/imported/attack.png-499108bf5fde290793c18a2de8e9bd6d.ctex"
+uid="uid://dtmq00hfj3bpb"
+path="res://.godot/imported/jello_ball.png-e48be92f9b891914b0bf66ca45c54e93.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player/Sprites/attack.png"
-dest_files=["res://.godot/imported/attack.png-499108bf5fde290793c18a2de8e9bd6d.ctex"]
+source_file="res://Collectibles/Jello Ball/jello_ball.png"
+dest_files=["res://.godot/imported/jello_ball.png-e48be92f9b891914b0bf66ca45c54e93.ctex"]
 
 [params]
 

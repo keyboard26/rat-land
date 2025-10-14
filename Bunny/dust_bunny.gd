@@ -13,9 +13,16 @@ var is_roaming: bool
 var knockback_timer = 0.0
 var knockback_direction = 1
 
+var player_in_range = false
+var attack_timer = 0.0
+var attack_cooldown = 0.5
+
 @onready var anim = get_node("AnimationPlayer")
 @onready var collision1 = $PlayerCollision.get_node("CollisionShape2D")
-@onready var collision2 = $BunnyDeath.get_node("CollisionShape2D")
+
+func _ready() -> void:
+	if Game.player != null:
+		player = Game.player
 
 func _physics_process(delta):
 	if !dead:
@@ -27,7 +34,6 @@ func _physics_process(delta):
 				velocity.y += gravity * delta
 			if anim.current_animation != "death":
 				anim.play("run")
-			player = get_node("../../Player/Player")
 			var direction = (player.position - self.position).normalized()
 			if direction.x > 0:
 				get_node("AnimatedSprite2D").flip_h = false
@@ -49,8 +55,18 @@ func _physics_process(delta):
 		
 	move_and_slide()
 	
-	if Game.player.is_dead:
+	if player.is_dead:
 		chase = false
+		player_in_range = false
+	
+	# attack the player
+	if player_in_range and not player.is_dead:
+		attack_timer -= delta
+		if attack_timer <= 0 and !player.invincible:
+			attack_timer = attack_cooldown
+			var push_dir = sign(player.position.x - position.x)
+			player.is_hit = true
+			player.do_knockback(damage, push_dir)
 
 
 func _on_bunny_hit_box_area_entered(area: Area2D) -> void:
@@ -62,21 +78,30 @@ func _on_bunny_hit_box_area_entered(area: Area2D) -> void:
 		if area.name == "UpAttackZone":
 			velocity.y = -150
 
+
+func _on_player_collision_body_entered(body: Node2D) -> void:
+	if body == player:
+		player_in_range = true
+		attack_timer = 0
+
+func _on_player_collision_body_exited(body: Node2D) -> void:
+	if body == player:
+		player_in_range = false
+
 func take_damage(damage_):
 	health -= damage_
-	Game.player.attack_success = true
+	player.attack_success = true
 	var push_dir
 	
-	if Game.player.position.x < self.position.x:
+	if player.position.x < self.position.x:
 		push_dir = -1
 	else:
 		push_dir = 1
 	
-	Game.player.knockback_direction = push_dir
+	player.knockback_direction = push_dir
 		
 	knockback_timer = 0.25
 	anim.play("knockback")
-	print("Bunny health: ", health)
 	if health <= 0:
 		health = 0
 		dead = true
@@ -84,18 +109,18 @@ func take_damage(damage_):
 
 
 func _on_area_2d_body_entered(body):
-	if body.name == "Player":
+	if body == player:
 		play_short_squeak()
 		chase = true
 
 
 func _on_area_2d_body_exited(body):
-	if body.name == "Player":
+	if body == player:
 		var keep_chase = false
 		await get_tree().create_timer(2).timeout
 		
-		for o_body in $Area2D.get_overlapping_bodies():
-			if o_body.name == "Player":
+		for o_body in $AggroArea.get_overlapping_bodies():
+			if o_body == player:
 				keep_chase = true
 		
 		if !keep_chase:
@@ -105,7 +130,6 @@ func _on_area_2d_body_exited(body):
 
 func die():
 	collision1.set_deferred("disabled", true)
-	collision2.set_deferred("disabled", true)
 
 	dead = true
 	Utils.saveGame()
@@ -116,31 +140,11 @@ func die():
 	self.queue_free()
 
 
-func _on_bunny_death_body_entered(body: Node2D) -> void:
-	if body.name == "Player":
-		body.velocity.y = -300
-		chase = false
-		die()
-		
-func _on_player_collision_body_entered(body: Node2D) -> void:
-	if body.name == "Player":
-		if !body.invincible and knockback_timer <= 0:
-			Game.playerHP -= damage
-			
-			var push_dir
-			if body.position.x < self.position.x:
-				push_dir = -1
-			else:
-				push_dir = 1
-			if damage <= Game.playerHP:
-				body.is_hit = true
-			
-			body.knockback_direction = push_dir
-			body.knockback_timer = 0.3
-			if body.is_dead == false:
-				body.velocity.y = -200
 
-var Coins = preload("res://Collectibles/coin.tscn")
+		
+
+
+var Coins = preload("res://Collectibles/Coin/coin.tscn")
 
 func drop_coins(amount: int):
 	for i in range(amount):

@@ -14,22 +14,29 @@ var is_dashing = false
 var can_dash = true
 var down_dashing = false
 var dash_direction
-var knockback_timer = 0.0
 var knockback_direction = 1
+var knockback = false
 var is_dead = false
 var was_on_floor = false
 var fall_start_y = 0.0
 var is_hit = false
 var direction = 1
+var prev_direction = 1
 var invincible = false
 var attack_success = false
-var attack_type = ""
+var attack_type = "forward"
 var currently_attack = false
+var looking_down = false
+var respawn_triggered = false
+
+var pickup_item = false
+var picking_up = false
 
 @onready var anim = $"AnimationPlayer"
 
 @onready var dash_timer =$"DashTimer"
 @onready var dash_cooldown = $"DashCooldown"
+@onready var knockback_timer = $"KnockbackTimer"
 
 @onready var forward_attack_zone = $ForwardAttackZone
 @onready var up_attack_zone = $UpAttackZone
@@ -37,31 +44,43 @@ var currently_attack = false
 
 
 func _ready() -> void:
-	Game.player = self
+	visible = true
+	
+	#while true:
+		#print("playerHP:", Game.playerHP, " / maxHP:", Game.maxHP)
+		#await get_tree().create_timer(3).timeout
 
 func _physics_process(delta: float) -> void:
-	if is_dead:
+	if Game.changing_scene:
+		velocity.x = SPEED * direction
+		move_and_slide()
 		return
-		
+	
+	if pickup_item:
+		if !picking_up: item_pickup()
+		velocity.x = 0
+		velocity.y = 0
+		anim.play("pick-up")
+		return
 	
 	if is_hit:
 		play_damage()
-		anim.play("hurt flash")
+		anim.play("hurt")
 		is_hit = false
-		
+	
 	# Add the gravity.
 	if not is_on_floor() and not down_dashing:
 		velocity += get_gravity() * delta
 	elif down_dashing:
-		velocity.y += 100
-
+		velocity.y += 40
+	
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 	
 	if Input.is_action_just_released("ui_accept") and velocity.y < 0.0:
 		velocity.y *= 0.5 
-
+	
 	
 	# Wall Jumping + Sliding
 	if is_on_wall_only() and not is_dashing and (Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_left")):
@@ -74,7 +93,7 @@ func _physics_process(delta: float) -> void:
 		is_wall_sliding = false
 	
 	
-	if is_on_wall_only() and Input.is_action_just_pressed("ui_accept"):
+	if is_on_wall_only() and Input.is_action_just_pressed("ui_accept") and knockback_timer.time_left <= 0:
 		if Input.is_action_pressed("ui_right"):
 			# jump left from right wall
 			velocity.y = JUMP_VELOCITY
@@ -86,16 +105,14 @@ func _physics_process(delta: float) -> void:
 			wall_jump_pushback = -150
 			wall_jump = true
 	
-	if wall_jump == true and wall_jump_timer <= 0:
+	if wall_jump and wall_jump_timer <= 0:
 		# timer to allow pushback to work
 		wall_jump = false
 		wall_jump_timer = 0.2
 	
 	if is_wall_sliding:
 		velocity.y += WALL_SLIDE_GRAVITY * delta
-		velocity.y = min(velocity.y, WALL_SLIDE_GRAVITY)
-	
-	
+		velocity.y = min(velocity.y, WALL_SLIDE_GRAVITY)	
 	
 	# stop falling if dashing
 	if is_dashing and not down_dashing:
@@ -103,39 +120,35 @@ func _physics_process(delta: float) -> void:
 	elif down_dashing:
 		velocity.x = 0
 	
-	
-	if knockback_timer >0:
+	if knockback:
 		# Apply knockback
 		var kb_power
 		if attack_success:
 			kb_power = 50
 		else:
-			invincible = true
 			kb_power = 300
 		velocity.x = kb_power * knockback_direction
-		knockback_timer -= delta
 	elif wall_jump_timer > 0:
 		velocity.x = -wall_jump_pushback
 		wall_jump_timer -= delta
-		invincible = false
 	else:
-		invincible = false
 		if not is_dashing:
 			direction = Input.get_axis("ui_left", "ui_right")
 
 		if direction == -1:
 			$"AnimatedSprite2D".flip_h = true
+			$Effects/AnimatedSprite2D.flip_h = true
 			forward_attack_zone.scale.x = -1
 		elif direction == 1:
-				$"AnimatedSprite2D".flip_h = false
-				forward_attack_zone.scale.x = 1
+			$"AnimatedSprite2D".flip_h = false
+			$Effects/AnimatedSprite2D.flip_h = false
+			forward_attack_zone.scale.x = 1
 				
-
-		
 		
 		# Dash with a cooldown
-		if Input.is_key_pressed(KEY_X) and can_dash:
+		if Input.is_action_just_pressed("dash") and can_dash:
 			if Input.is_action_pressed("ui_down") and not is_on_floor():
+				velocity.x = 0
 				start_down_dash()
 			else:
 				start_dash()
@@ -153,6 +166,8 @@ func _physics_process(delta: float) -> void:
 				velocity.x = dash_direction * speed
 			else:
 				velocity.x = direction * speed
+		elif down_dashing:
+			velocity.x = 0
 		else:
 			velocity.x = move_toward(velocity.x, 0, speed)
 			
@@ -165,7 +180,7 @@ func _physics_process(delta: float) -> void:
 		
 	
 	
-	if !currently_attack and !is_wall_sliding  and !is_dashing and knockback_timer <= 0:
+	if !currently_attack and !is_wall_sliding  and !is_dashing and !knockback:
 		if Input.is_action_just_pressed("player_attack"):
 			currently_attack = true
 			if !is_on_floor() and Input.is_action_pressed("ui_down"):
@@ -182,52 +197,81 @@ func _physics_process(delta: float) -> void:
 				
 	
 	#Animations
-	if currently_attack:
-		anim.play(attack_type)
-	elif knockback_timer > 0:
-		anim.play("hurt flash")
-	elif is_dashing:
-		if down_dashing:
-			anim.play("down-dash")
-		else:
-			anim.play("dash")
-	elif is_wall_sliding:
-		# had to switch to using this bc the jump/fall
-		#	animations would play over this
-		$"AnimatedSprite2D".animation = "wall-slide"
-		anim.play("wall-slide") # this is so the sounds play correctly
-	elif not is_on_floor():
-		if was_on_floor and velocity.y >= 0:
-			# Walking off a ledge, start falling immediately
-			anim.play("fall")
-		elif velocity.y < 0:
-			anim.play("jump")
-		else:
-			anim.play("fall")
-	elif abs(velocity.x) > 0:
-		anim.play("run")		
-	else:
-		anim.play("idle")
-	
-	
-	
-	# Player Dies
-	if Game.playerHP <= 0:
-		is_dead = true
-		$DeathNoise.play()
-		anim.play("death")
-		await get_tree().create_timer(1).timeout
-		get_tree().change_scene_to_file("res://main.tscn")
-		
 	if !is_dead:
-		move_and_slide()
-	
+		if currently_attack:
+			anim.play(attack_type)
+		elif knockback:
+			anim.play("hurt")
+		elif is_dashing:
+			if down_dashing:
+				anim.play("down-dash")
+			else:
+				anim.play("dash")
+		elif down_dashing:
+			anim.play("down-dash-reset")
+		elif is_wall_sliding:
+			# had to switch to using this bc the jump/fall
+			#	animations would play over this
+			$"AnimatedSprite2D".animation = "wall-slide"
+			anim.play("wall-slide") # this is so the sounds play correctly
+		elif not is_on_floor():
+			if was_on_floor and velocity.y >= 0:
+				# Walking off a ledge, start falling immediately
+				anim.play("fall")
+			elif velocity.y < 0:
+				anim.play("jump")
+			else:
+				anim.play("fall")
+		elif abs(velocity.x) > 0:
+			if prev_direction != direction:
+				anim.play("front")
+				prev_direction = direction
+				await get_tree().process_frame
+				anim.play("run")
+			else:
+				anim.play("run")
+		else:
+			if looking_down:
+				anim.play("look-down")
+			else:
+				anim.play("idle")
+		
 	# Landing sound
 	if not was_on_floor and is_on_floor():
 		$LandingSounds.play()
 		
 	was_on_floor = is_on_floor()
 	
+	
+	if !is_dead:
+		move_and_slide()
+	
+	
+	# Player Dies
+	if Game.playerHP <= 0 and !is_dead:
+		is_dead = true
+		$DeathNoise.play()
+		anim.play("death")
+		velocity.x = 150 * -direction
+		velocity.y = -100
+		
+	elif is_dead:
+		velocity.y += 50 * delta
+		velocity.x = move_toward(velocity.x, 0, 20*delta)
+		
+		move_and_slide()
+	
+		if is_on_floor() and !respawn_triggered:
+			respawn_triggered = true
+			
+			await get_tree().create_timer(0.5).timeout
+			Game.respawn(get_tree().current_scene.name)
+
+func item_pickup():
+	picking_up = true
+	await get_tree().create_timer(1).timeout
+	pickup_item = false
+	picking_up = false
 
 func handle_attack():
 	play_slash(attack_type)
@@ -258,7 +302,6 @@ func toggle_damage_collisions(type):
 
 
 
-
 func start_dash():
 	is_dashing = true
 	can_dash = false
@@ -283,18 +326,46 @@ func start_down_dash():
 	
 
 func _on_dash_timer_timeout() -> void:
-	is_dashing =false
-	down_dashing = false
+	is_dashing = false
 	dash_cooldown.start()
+	if down_dashing:
+		await get_tree().create_timer(0.12).timeout
+		down_dashing =  false
 
 func _on_dash_cooldown_timeout() -> void:
-	# flash so player knows when dash has cooled down
-	#var tween = get_tree().create_tween()
-	#tween.tween_property($"AnimatedSprite2D", "modulate:v", 1, 0.25).from(30)
+	#wait until the player has touched the ground/wall before letting them dash again
+	while !is_on_floor():
+		await get_tree().process_frame
+		if is_wall_sliding:
+			break
 	can_dash = true
+	
+	
+func do_knockback(damage, push_dir):
+	if invincible or is_dead:
+		return
+	
+	# apply damage and hit effects
+	Game.playerHP -= damage
+	if Game.playerHP > 0:
+		is_hit = true
+	
+	knockback_direction = push_dir	
+	knockback = true
+	invincible = true
+	
+	
+	knockback_timer.start()
+	
+	if !is_dead:
+		velocity.y = -200
 
 
-
+func _on_knockback_timer_timeout() -> void:
+	knockback = false
+	# player is invincible longer than the knockback lasts
+	await get_tree().create_timer(0.5).timeout
+	invincible = false
 
 
 
@@ -324,6 +395,14 @@ func play_damage():
 	var index = randi() % damage_sounds.size()
 	$Damage.stream = damage_sounds[index]
 	$Damage.play()
+
+
+func flash_white():
+	var tween: Tween = create_tween()
+	tween.tween_property($AnimatedSprite2D, "modulate:v", 1, 0.25).from(20)
+	
+
+
 
 func play_jump():
 	$Jump.play()
@@ -364,7 +443,7 @@ func play_slash(type):
 	
 	if attack_success:
 		$Attack.stream = hit_enemy[0]
-		knockback_timer = 0.1
+		# put in some minor knockback here ===============================================================================================================
 	elif terrain_hit != -1:
 		$Attack.stream = hit_terrain[terrain_hit]
 	else:
@@ -375,18 +454,15 @@ func play_slash(type):
 	await get_tree().create_timer(0.1).timeout
 	attack_success = false
 
-
-func terrain_was_hit(type):
+# this does not work :D ======================================================
+func terrain_was_hit(type): 
 	var bodies = $ForwardAttackZone.get_overlapping_bodies()
 	if type == "forward":
 		bodies = $ForwardAttackZone.get_overlapping_bodies()
-		print(bodies)
 	elif type == "up_air" or type == "up_ground":
 		bodies = $UpAttackZone.get_overlapping_bodies()
-		print(bodies)
 	elif type == "down":
 		bodies = $DownAttackZone.get_overlapping_bodies()
-		print(bodies)
 
 	for body in bodies:
 		if body.name == "WoodenStuff":

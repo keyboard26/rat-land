@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://ckhpbauneaut1"]
+
+[node name="LoadingScreen" type="CanvasLayer"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1984.0
+offset_bottom = 1126.0
+color = Color(0, 0, 0, 0)

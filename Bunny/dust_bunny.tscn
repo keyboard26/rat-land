@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dr1btdr5pc7bp"]
+[gd_scene load_steps=30 format=3 uid="uid://dr1btdr5pc7bp"]
 
 [ext_resource type="Script" uid="uid://c631n1ycyuxx6" path="res://Bunny/dust_bunny.gd" id="1_ehb4m"]
 [ext_resource type="Texture2D" uid="uid://bs7hd4rqo4t7" path="res://Bunny/bunny-idle.png" id="1_ltei3"]
@@ -109,7 +109,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u10ti"]
-size = Vector2(24.5, 19.25)
+size = Vector2(23.0769, 16.6667)
 
 [sub_resource type="Animation" id="Animation_dc3hx"]
 length = 0.001
@@ -263,11 +263,9 @@ _data = {
 &"run": SubResource("Animation_22r8w")
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_mxntl"]
-radius = 145.003
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_a31iu"]
-size = Vector2(17, 4.5)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dimx6"]
+radius = 145.0
+height = 290.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sjnpv"]
 size = Vector2(25.641, 21.5128)
@@ -277,6 +275,8 @@ radius = 16.0
 
 [node name="DustBunny" type="CharacterBody2D"]
 scale = Vector2(0.78, 0.78)
+collision_layer = 2
+collision_mask = 6
 script = ExtResource("1_ehb4m")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -287,7 +287,9 @@ autoplay = "idle"
 frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -10.375)
+light_mask = 0
+visibility_layer = 4
+position = Vector2(0, -8.33333)
 shape = SubResource("RectangleShape2D_u10ti")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -295,22 +297,24 @@ libraries = {
 &"": SubResource("AnimationLibrary_krxoc")
 }
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="AggroArea" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("CircleShape2D_mxntl")
-
-[node name="BunnyDeath" type="Area2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AggroArea"]
 visible = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BunnyDeath"]
-position = Vector2(0, -19)
-shape = SubResource("RectangleShape2D_a31iu")
+shape = SubResource("CapsuleShape2D_dimx6")
 disabled = true
 
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AggroArea"]
+position = Vector2(-141.026, 8.97436)
+scale = Vector2(2.03629, 2.17481)
+polygon = PackedVector2Array(62.8205, -3.84615, 143.59, -3.84615, 130.769, -39.7436, 106.41, -60.2564, 83.3333, -69.2308, 51.2821, -69.2308, 29.4872, -61.5385, 8.97436, -37.1795, -2.79275, -3.86748)
+
 [node name="PlayerCollision" type="Area2D" parent="."]
+light_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCollision"]
+light_mask = 0
+visibility_layer = 0
 position = Vector2(0, -9.75641)
 shape = SubResource("RectangleShape2D_sjnpv")
 
@@ -321,13 +325,17 @@ stream = ExtResource("5_bupju")
 stream = ExtResource("6_aprh8")
 
 [node name="BunnyHitBox" type="Area2D" parent="."]
+light_mask = 4
+visibility_layer = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BunnyHitBox"]
+light_mask = 0
+visibility_layer = 0
 position = Vector2(0, -15)
 shape = SubResource("CircleShape2D_aprh8")
 
-[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
-[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
-[connection signal="body_entered" from="BunnyDeath" to="." method="_on_bunny_death_body_entered"]
+[connection signal="body_entered" from="AggroArea" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="AggroArea" to="." method="_on_area_2d_body_exited"]
 [connection signal="body_entered" from="PlayerCollision" to="." method="_on_player_collision_body_entered"]
+[connection signal="body_exited" from="PlayerCollision" to="." method="_on_player_collision_body_exited"]
 [connection signal="area_entered" from="BunnyHitBox" to="." method="_on_bunny_hit_box_area_entered"]

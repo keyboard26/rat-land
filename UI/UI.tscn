@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://gjc6p2a2h6y1"]
+
+[ext_resource type="Script" uid="uid://y4m2kat0nl1e" path="res://UI/h_box_container.gd" id="1_qui0h"]
+[ext_resource type="Script" uid="uid://dttosukoouf33" path="res://UI/ui.gd" id="1_vrfts"]
+[ext_resource type="FontFile" uid="uid://71nbfgn2t84h" path="res://ThatSoundsGreat-yYLE3.ttf" id="2_0mc3e"]
+[ext_resource type="Texture2D" uid="uid://javvw2wuds7o" path="res://UI/heart.png" id="2_vrfts"]
+[ext_resource type="Texture2D" uid="uid://1yb7rl6qe1by" path="res://UI/empty_heart.png" id="3_0mc3e"]
+[ext_resource type="PackedScene" uid="uid://bud5sgxbn0mf6" path="res://UI/heart_particles.tscn" id="4_2n5f6"]
+
+[sub_resource type="GDScript" id="GDScript_i1vam"]
+script/source = "extends Label
+
+
+
+var coinsAmount = 0
+@onready var text_timer = $TextTimer
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	show()
+	var tween = create_tween()
+	tween.tween_property(self, \"modulate:a\", 0, 0.1)
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta: float) -> void:
+	text = \"Coins: \" + str(Game.coins)
+
+	if Game.coins != coinsAmount:
+		coinsAmount = Game.coins
+		text_timer.start()
+		fade_in()
+
+
+func _on_text_timer_timeout() -> void:
+	fade_out()
+
+func fade_in() -> void:
+	var tween = create_tween()
+	tween.tween_property(self, \"modulate:a\", 1, 0.2)
+
+func fade_out() -> void:
+	var tween = create_tween()
+	tween.tween_property(self, \"modulate:a\", 0, 0.2)
+"
+
+[node name="UI" type="CanvasLayer"]
+script = ExtResource("1_vrfts")
+
+[node name="Coins" type="Label" parent="."]
+offset_left = 33.0
+offset_top = 132.0
+offset_right = 73.0
+offset_bottom = 201.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_0mc3e")
+theme_override_font_sizes/font_size = 35
+text = "eee"
+script = SubResource("GDScript_i1vam")
+
+[node name="TextTimer" type="Timer" parent="Coins"]
+wait_time = 2.0
+one_shot = true
+
+[node name="HeartsBar" type="HBoxContainer" parent="."]
+offset_left = 24.0
+offset_top = 11.0
+offset_right = 64.0
+offset_bottom = 51.0
+script = ExtResource("1_qui0h")
+full_heart = ExtResource("2_vrfts")
+empty_heart = ExtResource("3_0mc3e")
+heart_particles = ExtResource("4_2n5f6")
+
+[node name="TextureRect" type="TextureRect" parent="HeartsBar"]
+layout_mode = 2
+stretch_mode = 3
+
+[node name="HeartParticles" parent="HeartsBar" instance=ExtResource("4_2n5f6")]
+
+[connection signal="timeout" from="Coins/TextTimer" to="Coins" method="_on_text_timer_timeout"]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dds7gx2qnw7kc"
-path="res://.godot/imported/attack.png-499108bf5fde290793c18a2de8e9bd6d.ctex"
+uid="uid://1yb7rl6qe1by"
+path="res://.godot/imported/empty_heart.png-dc6c861d046394e5c8d10a793ecf918a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player/Sprites/attack.png"
-dest_files=["res://.godot/imported/attack.png-499108bf5fde290793c18a2de8e9bd6d.ctex"]
+source_file="res://UI/empty_heart.png"
+dest_files=["res://.godot/imported/empty_heart.png-dc6c861d046394e5c8d10a793ecf918a.ctex"]
 
 [params]
 
