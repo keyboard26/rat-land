@@ -63,7 +63,7 @@ func _physics_process(delta: float) -> void:
 		anim.play("pick-up")
 		return
 	
-	if is_hit:
+	if is_hit and !is_dead:
 		play_damage()
 		anim.play("hurt")
 		is_hit = false
@@ -75,15 +75,15 @@ func _physics_process(delta: float) -> void:
 		velocity.y += 40
 	
 	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("ui_accept") and is_on_floor() and !is_dead:
 		velocity.y = JUMP_VELOCITY
 	
-	if Input.is_action_just_released("ui_accept") and velocity.y < 0.0:
+	if Input.is_action_just_released("ui_accept") and velocity.y < 0.0 and !is_dead:
 		velocity.y *= 0.5 
 	
 	
 	# Wall Jumping + Sliding
-	if is_on_wall_only() and not is_dashing and (Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_left")):
+	if is_on_wall_only() and not is_dashing and (Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_left")) and !is_dead:
 		# have to be pushing left or right to wall slide
 		is_wall_sliding = true
 		$WallSlide.volume_db = 1
@@ -93,13 +93,13 @@ func _physics_process(delta: float) -> void:
 		is_wall_sliding = false
 	
 	
-	if is_on_wall_only() and Input.is_action_just_pressed("ui_accept") and knockback_timer.time_left <= 0:
-		if Input.is_action_pressed("ui_right"):
+	if is_on_wall_only() and Input.is_action_just_pressed("ui_accept") and knockback_timer.time_left <= 0 and !is_dead:
+		if Input.is_action_pressed("ui_right") and !is_dead:
 			# jump left from right wall
 			velocity.y = JUMP_VELOCITY
 			wall_jump_pushback = 150
 			wall_jump = true
-		elif Input.is_action_pressed("ui_left"):
+		elif Input.is_action_pressed("ui_left") and !is_dead:
 			# jump right from left wall
 			velocity.y = JUMP_VELOCITY
 			wall_jump_pushback = -150
@@ -146,14 +146,14 @@ func _physics_process(delta: float) -> void:
 				
 		
 		# Dash with a cooldown
-		if Input.is_action_just_pressed("dash") and can_dash:
+		if Input.is_action_just_pressed("dash") and can_dash and !is_dead:
 			if Input.is_action_pressed("ui_down") and not is_on_floor():
 				velocity.x = 0
 				start_down_dash()
 			else:
 				start_dash()
 		
-		if direction or is_dashing and not down_dashing:
+		if direction or is_dashing and not down_dashing and !is_dead:
 			if is_dashing:
 				speed = DASH_SPEED
 			else:
@@ -180,7 +180,7 @@ func _physics_process(delta: float) -> void:
 		
 	
 	
-	if !currently_attack and !is_wall_sliding  and !is_dashing and !knockback:
+	if !currently_attack and !is_wall_sliding  and !is_dashing and !knockback and !is_dead:
 		if Input.is_action_just_pressed("player_attack"):
 			currently_attack = true
 			if !is_on_floor() and Input.is_action_pressed("ui_down"):
@@ -193,8 +193,7 @@ func _physics_process(delta: float) -> void:
 			else:
 				attack_type = "forward"
 			handle_attack()
-			
-				
+		
 	
 	#Animations
 	if !is_dead:
@@ -255,7 +254,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 150 * -direction
 		velocity.y = -100
 		
-	elif is_dead:
+	if is_dead:
 		velocity.y += 50 * delta
 		velocity.x = move_toward(velocity.x, 0, 20*delta)
 		

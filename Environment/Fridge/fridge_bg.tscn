@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://t1e1ptgay3au"]
+
+[ext_resource type="Texture2D" uid="uid://b0mp7wkain5ag" path="res://Environment/Fridge/fridgeBG.png" id="1_752nw"]
+[ext_resource type="Texture2D" uid="uid://bq42wqem0v0ew" path="res://Environment/Fridge/Untitled_Artwork-1.png" id="2_to3t1"]
+[ext_resource type="Texture2D" uid="uid://86bwbh3qwyvk" path="res://Environment/Fridge/Untitled_Artwork-2.png" id="3_xg6jw"]
+
+[node name="FridgeBG" type="ParallaxBackground"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+motion_mirroring = Vector2(1250, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer"]
+position = Vector2(625, 821)
+scale = Vector2(0.771605, 0.759722)
+texture = ExtResource("1_752nw")
+
+[node name="edge" type="Sprite2D" parent="ParallaxLayer"]
+modulate = Color(1, 1, 1, 0.32549)
+position = Vector2(625, 818)
+rotation = -3.14159
+scale = Vector2(0.772, 0.76)
+texture = ExtResource("2_to3t1")
+
+[node name="middle" type="Sprite2D" parent="ParallaxLayer"]
+modulate = Color(1, 1, 1, 0.545098)
+position = Vector2(750, 787.5)
+scale = Vector2(0.471803, 0.270833)
+texture = ExtResource("3_xg6jw")

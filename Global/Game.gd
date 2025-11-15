@@ -5,6 +5,7 @@ var maxHP = 5
 var playerHP = maxHP
 var playerDamageAmount = 3
 var playerDamageZone: Area2D
+var playerDeaths = 0
 
 var coins = 0
 var showCoins = false
@@ -17,18 +18,33 @@ var changing_scene = false
 
 var jelloPackets = 0
 
+var big_mobs_alive := {} #dictionary keyed by scene name
+
 var inventory
 var inv_open = false
 
-func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("toggle_inventory") and !inv_open:
-		Game.open_inventory()
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	inventory = load("res://inventory.tscn").instantiate()
+	inventory.process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().root.add_child.call_deferred(inventory)
 	inventory.hide()
+
+
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("toggle_inventory"):
+		if inv_open:
+			print("call closed")
+			close_inventory()
+		elif !changing_scene:
+			open_inventory()
+			print("call open")
+
+
+
 
 func change_scene(scene1: String, scene2: String) -> void:
 	var spawn_pos = get_spawn_position(scene1, scene2)
@@ -118,6 +134,7 @@ func spawn_ball(position: Vector2) -> void:
 
 
 func respawn(scene): 
+	playerDeaths += 1
 	# get rid of coins but in a fancy way but it's still ugly :(
 	respawnCoins = coins
 	var timerspeed = 0.05
@@ -127,8 +144,6 @@ func respawn(scene):
 		if coins <= 0: break
 		await get_tree().create_timer(timerspeed).timeout
 	coins = 0
-	
-	
 	
 	# add loading screen
 	var loading = load("res://loading_screen.tscn").instantiate()
@@ -145,6 +160,7 @@ func respawn(scene):
 	
 	scene = fix_scene_names(scene)
 	
+	
 	await get_tree().create_timer(.7).timeout
 	
 	# move the player
@@ -153,21 +169,40 @@ func respawn(scene):
 	playerHP = maxHP
 	player.respawn_triggered = false
 	
+	await get_tree().process_frame
+	
+	# respawn mobs
+	var current_scene = get_tree().current_scene
+	var current_name = fix_scene_names(current_scene.name)
+	if current_scene:
+		MobManager.respawn_big_mobs(current_name)
+		
+		if current_scene.has_node("Mobs"):
+			var mobs_node = current_scene.get_node("Mobs")
+			
+			# delete all current mobs to prevent duplicates spawning
+			for child in mobs_node.get_children():
+				child.queue_free()
+			mobs_node.spawned_bunnies = MobManager.spawn_mobs(current_name, mobs_node)
+	
 	# load screen fade out
 	var tween_out = get_tree().create_tween()
 	tween_out.tween_property(fade_rect, "color:a", 0.0, 0.4)
 	await tween_out.finished
 	# remove loading screen
 	loading.queue_free()
+	
 
 
 
 func open_inventory():
-	inv_open = true
+	if inv_open: return
+	
 	var current = get_tree().current_scene
-	#don't open inv when in the main menu
-	if current.name == "main":
-		return
+	if current.name == "main": return
+	
+	inv_open = true
+	get_tree().paused = true
 	
 	# add to current scene
 	if inventory.get_parent() != current:
@@ -176,31 +211,35 @@ func open_inventory():
 	
 	# fade in the inventory
 	inventory.show()
-	var fade = inventory.get_node("CenterContainer/ColorRect")
-	var tween_in = get_tree().create_tween()
-	tween_in.tween_property(fade, "color:a", 1.0, 0.2)
+	var fade = inventory.get_node("CenterContainer")
+	var tween_in = inventory.create_tween()
+	tween_in.tween_property(fade, "modulate:a", 1.0, 0.2)
 	await tween_in.finished
 	
 	print("open")
-	
-	# leave open until button pressed again
-	while true:
-		await get_tree().process_frame
-		if Input.is_action_just_pressed("toggle_inventory"):
-			break
-	
-	print("close")
+
+
+
+func close_inventory():
+	if !inv_open: return
+	var fade = inventory.get_node("CenterContainer")
 	
 	# fade out inventory
-	var tween_out = get_tree().create_tween()
-	tween_out.tween_property(fade, "color:a", 0.0, 0.2)
+	var tween_out = inventory.create_tween()
+	tween_out.tween_property(fade, "modulate:a", 0.0, 0.2)
 	await tween_out.finished
 	
 	inventory.hide()
+	
 	# detatch from current scene and add back to root
-	current.remove_child(inventory)
+	var current = get_tree().current_scene
+	if inventory.get_parent() == current:
+		current.remove_child(inventory)
 	get_tree().root.add_child(inventory)
+	
+	get_tree().paused = false
 	inv_open = false
+	print("close")
 
 
 func get_spawn_position(scene1: String, scene2: String) -> Vector2:
@@ -217,8 +256,8 @@ func get_spawn_position(scene1: String, scene2: String) -> Vector2:
 	elif scene1 =="world":
 		if scene2 == "world_2":
 			return Vector2(20, 912)
-		if scene2 == "uhhhh":
-			return Vector2(0,0)
+		if scene2 == "fridge":
+			return Vector2(144, 198)
 	
 	# positions when leaving world_2
 	elif scene1 == "world_2":
@@ -226,7 +265,7 @@ func get_spawn_position(scene1: String, scene2: String) -> Vector2:
 			return Vector2(2730, 1056)
 		if scene2 == "uhhhh":
 			return Vector2(0,0)
-
+	
 	return Vector2(0, 0) #backup just in case
 
 
@@ -241,9 +280,15 @@ func get_cam_limits(scene: String) -> void:
 		player_cam.limit_top = 730
 		player_cam.limit_right = 1230
 		player_cam.limit_left = 0
+	if scene == "fridge":
+		player_cam.limit_top = 20
+		player_cam.limit_left = 40
+		player_cam.limit_right = 705
 		
 
 func fix_scene_names(scene: String):
 	if scene == "World": return "world"
 	if scene == "world2": return "world_2"
+	
+	return scene
 	

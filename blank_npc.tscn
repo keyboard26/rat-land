@@ -1,0 +1,102 @@
+[gd_scene load_steps=10 format=3 uid="uid://b2621pnhxp4kc"]
+
+[ext_resource type="Script" uid="uid://1b7ufnim1x8w" path="res://blank_npc.gd" id="1_fv8n0"]
+[ext_resource type="Texture2D" uid="uid://cyj5o50qwenlg" path="res://Untitled_Artwork (17).png" id="2_tbdya"]
+[ext_resource type="FontFile" uid="uid://71nbfgn2t84h" path="res://ThatSoundsGreat-yYLE3.ttf" id="3_tbdya"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bph16"]
+atlas = ExtResource("2_tbdya")
+region = Rect2(0, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mckkk"]
+atlas = ExtResource("2_tbdya")
+region = Rect2(200, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gu0sx"]
+atlas = ExtResource("2_tbdya")
+region = Rect2(400, 0, 200, 200)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tge1q"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bph16")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mckkk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gu0sx")
+}],
+"loop": true,
+"name": &"talk",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xhmid"]
+radius = 49.0
+height = 132.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5pnu8"]
+size = Vector2(411.5, 166)
+
+[node name="blankNPC" type="CharacterBody2D"]
+script = ExtResource("1_fv8n0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_tge1q")
+animation = &"talk"
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visibility_layer = 8
+position = Vector2(4, 14)
+shape = SubResource("CapsuleShape2D_xhmid")
+
+[node name="InteractRange" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractRange"]
+shape = SubResource("RectangleShape2D_5pnu8")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -220.0
+offset_right = 125.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="ColorRect"]
+layout_mode = 0
+offset_right = 250.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_tbdya")
+theme_override_font_sizes/font_size = 20
+text = "sneep snop"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="arrow" type="Label" parent="ColorRect"]
+layout_mode = 0
+offset_left = 235.0
+offset_top = 79.0
+offset_right = 275.0
+offset_bottom = 102.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_tbdya")
+text = ">"
+
+[connection signal="body_entered" from="InteractRange" to="." method="_on_interact_range_body_entered"]
+[connection signal="body_exited" from="InteractRange" to="." method="_on_interact_range_body_exited"]

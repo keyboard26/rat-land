@@ -7,7 +7,7 @@ var was_on_floor = true
 
 
 func _ready():
-	collision_mask = 1 << 2    # so it only collides with the ground
+	# so it only collides with the ground
 	velocity = Vector2(randf_range(-300,300), randf_range(-200,-150))
 
 

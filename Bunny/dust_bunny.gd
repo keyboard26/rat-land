@@ -18,7 +18,6 @@ var attack_timer = 0.0
 var attack_cooldown = 0.5
 
 @onready var anim = get_node("AnimationPlayer")
-@onready var collision1 = $PlayerCollision.get_node("CollisionShape2D")
 
 func _ready() -> void:
 	if Game.player != null:
@@ -127,21 +126,21 @@ func _on_area_2d_body_exited(body):
 			chase = keep_chase
 		
 
+signal died
 
 func die():
-	collision1.set_deferred("disabled", true)
-
 	dead = true
 	Utils.saveGame()
-	drop_coins(5)
+	var rng = RandomNumberGenerator.new()
+	var ranint = rng.randi_range(3,6)
+	drop_coins(ranint)
 	play_squeak()
 	anim.play("death")
 	await get_tree().create_timer(0.3).timeout
 	self.queue_free()
+	emit_signal("died")
 
 
-
-		
 
 
 var Coins = preload("res://Collectibles/Coin/coin.tscn")
@@ -154,7 +153,6 @@ func drop_coins(amount: int):
 		get_parent().call_deferred("add_child", coin)
 		
 		
-
 
 
 

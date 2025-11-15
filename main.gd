@@ -5,7 +5,6 @@ func _ready():
 	#Utils.saveGame()
 	#Utils.loadGame()
 	$MainMenuCam.make_current()
-	print(get_tree().current_scene.name)
 
 
 func _on_button_pressed() -> void:
