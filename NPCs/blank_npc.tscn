@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://b2621pnhxp4kc"]
 
-[ext_resource type="Script" uid="uid://1b7ufnim1x8w" path="res://blank_npc.gd" id="1_fv8n0"]
-[ext_resource type="Texture2D" uid="uid://cyj5o50qwenlg" path="res://Untitled_Artwork (17).png" id="2_tbdya"]
+[ext_resource type="Script" uid="uid://1b7ufnim1x8w" path="res://NPCs/blank_npc.gd" id="1_fv8n0"]
+[ext_resource type="Texture2D" uid="uid://cyj5o50qwenlg" path="res://NPCs/blan_npc.png" id="2_tbdya"]
 [ext_resource type="FontFile" uid="uid://71nbfgn2t84h" path="res://ThatSoundsGreat-yYLE3.ttf" id="3_tbdya"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bph16"]

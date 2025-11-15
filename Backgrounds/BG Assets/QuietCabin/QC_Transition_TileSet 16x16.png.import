@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxgg6kxkjosug"
-path="res://.godot/imported/UM_BackGround 16x16.png-3d9f0ea9fc7c903032d5f8d29be27e43.ctex"
+uid="uid://cfvcng7oullsi"
+path="res://.godot/imported/QC_Transition_TileSet 16x16.png-d26955c4f69578dfae1fd0a0df574434.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://BG Assets/UndergroundMine/UM_BackGround 16x16.png"
-dest_files=["res://.godot/imported/UM_BackGround 16x16.png-3d9f0ea9fc7c903032d5f8d29be27e43.ctex"]
+source_file="res://Backgrounds/BG Assets/QuietCabin/QC_Transition_TileSet 16x16.png"
+dest_files=["res://.godot/imported/QC_Transition_TileSet 16x16.png-d26955c4f69578dfae1fd0a0df574434.ctex"]
 
 [params]
 

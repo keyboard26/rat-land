@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cx6v5qrdeouvf"]
 
-[ext_resource type="Texture2D" uid="uid://jfq6gjd5dehp" path="res://BG Assets/QuietCabin/QC_BackGround 16x16.png" id="1_y81e4"]
+[ext_resource type="Texture2D" uid="uid://jfq6gjd5dehp" path="res://Backgrounds/BG Assets/QuietCabin/QC_BackGround 16x16.png" id="1_y81e4"]
 
 [node name="CabinBG" type="ParallaxBackground"]
 scroll_base_scale = Vector2(0.3, 0.3)

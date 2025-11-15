@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://catcirxfh8bon"
-path="res://.godot/imported/QC_0Quiet Cabin TileSet 16x16.png-958a1ca5b5829f52ab23dde5840035eb.ctex"
+uid="uid://cyj5o50qwenlg"
+path="res://.godot/imported/blan_npc.png-89786ebdf606de52e7bc4a04ff7f242a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://BG Assets/QuietCabin/QC_0Quiet Cabin TileSet 16x16.png"
-dest_files=["res://.godot/imported/QC_0Quiet Cabin TileSet 16x16.png-958a1ca5b5829f52ab23dde5840035eb.ctex"]
+source_file="res://NPCs/blan_npc.png"
+dest_files=["res://.godot/imported/blan_npc.png-89786ebdf606de52e7bc4a04ff7f242a.ctex"]
 
 [params]
 

@@ -24,7 +24,7 @@ buses/default_bus_layout=""
 Utils="*res://Global/Utils.gd"
 Game="*res://Global/Game.gd"
 Ui="*res://UI/UI.tscn"
-MobManager="*res://mob_manager.gd"
+MobManager="*res://Global/mob_manager.gd"
 
 [display]
 

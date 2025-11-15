@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cyj5o50qwenlg"
-path="res://.godot/imported/Untitled_Artwork (17).png-0e266e7710e5ae5a7a2c48777ace0539.ctex"
+uid="uid://c0w8wgiusbu11"
+path="res://.godot/imported/UM_TileGround 16x16.png-b151869ab0b652e50a2cea520373ba5e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Untitled_Artwork (17).png"
-dest_files=["res://.godot/imported/Untitled_Artwork (17).png-0e266e7710e5ae5a7a2c48777ace0539.ctex"]
+source_file="res://Backgrounds/BG Assets/UndergroundMine/UM_TileGround 16x16.png"
+dest_files=["res://.godot/imported/UM_TileGround 16x16.png-b151869ab0b652e50a2cea520373ba5e.ctex"]
 
 [params]
 

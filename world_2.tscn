@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=4 uid="uid://ck3rkmbh7c7v1"]
 
 [ext_resource type="Script" uid="uid://cr4ndkqj80wud" path="res://world_2.gd" id="1_hlada"]
-[ext_resource type="Texture2D" uid="uid://ghklwqqrlnwa" path="res://BG Assets/UndergroundMine/UM_UndergroundMine_TileSet 16x16.png" id="1_u5ktm"]
+[ext_resource type="Texture2D" uid="uid://ghklwqqrlnwa" path="res://Backgrounds/BG Assets/UndergroundMine/UM_UndergroundMine_TileSet 16x16.png" id="1_u5ktm"]
 [ext_resource type="PackedScene" uid="uid://doit05nknndid" path="res://mine_bg.tscn" id="2_3m1hs"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3m1hs"]

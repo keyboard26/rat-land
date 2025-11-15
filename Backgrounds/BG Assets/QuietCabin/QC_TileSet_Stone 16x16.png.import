@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfvcng7oullsi"
-path="res://.godot/imported/QC_Transition_TileSet 16x16.png-4a15f618e54e3af9fa712fb587ea4c99.ctex"
+uid="uid://bohe6tjdgbsv0"
+path="res://.godot/imported/QC_TileSet_Stone 16x16.png-cab0f10f9f4dd2978a268d74e076a60f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://BG Assets/QuietCabin/QC_Transition_TileSet 16x16.png"
-dest_files=["res://.godot/imported/QC_Transition_TileSet 16x16.png-4a15f618e54e3af9fa712fb587ea4c99.ctex"]
+source_file="res://Backgrounds/BG Assets/QuietCabin/QC_TileSet_Stone 16x16.png"
+dest_files=["res://.godot/imported/QC_TileSet_Stone 16x16.png-cab0f10f9f4dd2978a268d74e076a60f.ctex"]
 
 [params]
 

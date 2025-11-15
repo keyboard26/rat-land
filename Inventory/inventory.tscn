@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bgyouyej2liti"]
 
-[ext_resource type="Script" uid="uid://cswwjkuth1wsy" path="res://jellos.gd" id="2_5tt2m"]
+[ext_resource type="Script" uid="uid://cswwjkuth1wsy" path="res://Inventory/jellos.gd" id="2_5tt2m"]
 
 [sub_resource type="GDScript" id="GDScript_pohso"]
 script/source = "extends Label

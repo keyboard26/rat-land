@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cchvwd1bqg5l4"
-path="res://.godot/imported/QC_TileSet_Wood 16x16.png-174cf9e1756d859239fef95159f256cc.ctex"
+uid="uid://jfq6gjd5dehp"
+path="res://.godot/imported/QC_BackGround 16x16.png-b0ff6eb8437bbe262e6b49e980d3e152.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://BG Assets/QuietCabin/QC_TileSet_Wood 16x16.png"
-dest_files=["res://.godot/imported/QC_TileSet_Wood 16x16.png-174cf9e1756d859239fef95159f256cc.ctex"]
+source_file="res://Backgrounds/BG Assets/QuietCabin/QC_BackGround 16x16.png"
+dest_files=["res://.godot/imported/QC_BackGround 16x16.png-b0ff6eb8437bbe262e6b49e980d3e152.ctex"]
 
 [params]
 

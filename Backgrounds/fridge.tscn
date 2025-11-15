@@ -1,15 +1,15 @@
 [gd_scene load_steps=16 format=4 uid="uid://bccm1iqqkwnwx"]
 
-[ext_resource type="Texture2D" uid="uid://d3p2bmwv5n3vm" path="res://Environment/Fridge/fridge image.png" id="1_6ofhc"]
-[ext_resource type="Texture2D" uid="uid://b2lvr44oq0txg" path="res://Environment/Fridge/metal.png" id="1_085p4"]
-[ext_resource type="Texture2D" uid="uid://dbym046oe0vfn" path="res://Environment/Fridge/plastic.png" id="2_e6sfw"]
-[ext_resource type="Texture2D" uid="uid://dseck1lqwm6fj" path="res://Environment/Fridge/tileset 1.png" id="2_x7sr2"]
-[ext_resource type="PackedScene" uid="uid://t1e1ptgay3au" path="res://Environment/Fridge/fridge_bg.tscn" id="3_e6sfw"]
-[ext_resource type="Texture2D" uid="uid://cgqfjj746osvo" path="res://Environment/Fridge/Untitled_Artwork (16).png" id="6_x7sr2"]
-[ext_resource type="Texture2D" uid="uid://b0smjnwbvtlmr" path="res://Player/Sprites/front.png" id="7_2t0b2"]
+[ext_resource type="Texture2D" uid="uid://cgqfjj746osvo" path="res://Environment/Fridge/Untitled_Artwork (16).png" id="1_rcbfr"]
+[ext_resource type="Texture2D" uid="uid://d3p2bmwv5n3vm" path="res://Environment/Fridge/fridge image.png" id="2_ddrus"]
+[ext_resource type="Texture2D" uid="uid://dseck1lqwm6fj" path="res://Environment/Fridge/tileset 1.png" id="3_k4bmn"]
+[ext_resource type="Texture2D" uid="uid://b2lvr44oq0txg" path="res://Environment/Fridge/metal.png" id="4_un5e7"]
+[ext_resource type="Texture2D" uid="uid://dbym046oe0vfn" path="res://Environment/Fridge/plastic.png" id="5_75u2q"]
+[ext_resource type="Texture2D" uid="uid://b0smjnwbvtlmr" path="res://Player/Sprites/front.png" id="6_vvctw"]
+[ext_resource type="PackedScene" uid="uid://t1e1ptgay3au" path="res://Environment/Fridge/fridge_bg.tscn" id="7_cjnvx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2t0b2"]
-texture = ExtResource("2_x7sr2")
+texture = ExtResource("3_k4bmn")
 1:1/0 = 0
 1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:1/0 = 0
@@ -492,7 +492,7 @@ texture = ExtResource("2_x7sr2")
 29:14/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tq3bb"]
-texture = ExtResource("1_085p4")
+texture = ExtResource("4_un5e7")
 2:0/0 = 0
 3:0/0 = 0
 4:0/0 = 0
@@ -635,7 +635,7 @@ texture = ExtResource("1_085p4")
 1:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1drli"]
-texture = ExtResource("2_e6sfw")
+texture = ExtResource("5_75u2q")
 2:0/0 = 0
 3:0/0 = 0
 4:0/0 = 0
@@ -812,7 +812,7 @@ sources/3 = SubResource("TileSetAtlasSource_1drli")
 sources/0 = SubResource("TileSetAtlasSource_2t0b2")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ayjkl"]
-texture = ExtResource("2_x7sr2")
+texture = ExtResource("3_k4bmn")
 1:1/0 = 0
 1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:1/0 = 0
@@ -1293,7 +1293,7 @@ texture = ExtResource("2_x7sr2")
 29:14/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wjbh6"]
-texture = ExtResource("1_085p4")
+texture = ExtResource("4_un5e7")
 2:0/0 = 0
 3:0/0 = 0
 4:0/0 = 0
@@ -1436,7 +1436,7 @@ texture = ExtResource("1_085p4")
 1:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_psch2"]
-texture = ExtResource("2_e6sfw")
+texture = ExtResource("5_75u2q")
 2:0/0 = 0
 3:0/0 = 0
 4:0/0 = 0
@@ -1619,14 +1619,14 @@ modulate = Color(1, 1, 1, 0.956863)
 position = Vector2(577, 312)
 rotation = 1.5708
 scale = Vector2(0.266222, 0.282294)
-texture = ExtResource("6_x7sr2")
+texture = ExtResource("1_rcbfr")
 
 [node name="FridgeImage" type="Sprite2D" parent="."]
 visible = false
 modulate = Color(1, 1, 1, 0.396078)
 position = Vector2(220, 264)
 scale = Vector2(0.18, 0.18)
-texture = ExtResource("1_6ofhc")
+texture = ExtResource("2_ddrus")
 
 [node name="Walls" type="TileMapLayer" parent="."]
 scale = Vector2(0.3, 0.3)
@@ -1642,8 +1642,8 @@ tile_set = SubResource("TileSet_qk6dd")
 visible = false
 position = Vector2(77, 216)
 scale = Vector2(0.188, 0.188)
-texture = ExtResource("7_2t0b2")
+texture = ExtResource("6_vvctw")
 
-[node name="FridgeBG" parent="." instance=ExtResource("3_e6sfw")]
+[node name="FridgeBG" parent="." instance=ExtResource("7_cjnvx")]
 scale = Vector2(0.55, 0.55)
 transform = Transform2D(0.55, 0, 0, 0.55, 0, 0)

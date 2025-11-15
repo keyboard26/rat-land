@@ -28,7 +28,7 @@ var inv_open = false
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
-	inventory = load("res://inventory.tscn").instantiate()
+	inventory = load("res://Inventory/inventory.tscn").instantiate()
 	inventory.process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().root.add_child.call_deferred(inventory)
 	inventory.hide()

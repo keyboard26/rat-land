@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cods3dtldve5w"
-path="res://.godot/imported/UM_Objects 16x16.png-f7adc0c5f983c59a53038ac30d86ac36.ctex"
+uid="uid://ghklwqqrlnwa"
+path="res://.godot/imported/UM_UndergroundMine_TileSet 16x16.png-6658c52bfde432e5806d37499d92721d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://BG Assets/UndergroundMine/UM_Objects 16x16.png"
-dest_files=["res://.godot/imported/UM_Objects 16x16.png-f7adc0c5f983c59a53038ac30d86ac36.ctex"]
+source_file="res://Backgrounds/BG Assets/UndergroundMine/UM_UndergroundMine_TileSet 16x16.png"
+dest_files=["res://.godot/imported/UM_UndergroundMine_TileSet 16x16.png-6658c52bfde432e5806d37499d92721d.ctex"]
 
 [params]
 

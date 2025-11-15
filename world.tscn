@@ -2,17 +2,17 @@
 
 [ext_resource type="Script" uid="uid://5ldvxfot8ldq" path="res://world.gd" id="1_wse8f"]
 [ext_resource type="Texture2D" uid="uid://b2lvr44oq0txg" path="res://Environment/Fridge/metal.png" id="2_wse8f"]
-[ext_resource type="Texture2D" uid="uid://catcirxfh8bon" path="res://BG Assets/QuietCabin/QC_0Quiet Cabin TileSet 16x16.png" id="3_hiqwa"]
+[ext_resource type="Texture2D" uid="uid://catcirxfh8bon" path="res://Backgrounds/BG Assets/QuietCabin/QC_0Quiet Cabin TileSet 16x16.png" id="3_hiqwa"]
 [ext_resource type="Texture2D" uid="uid://dbym046oe0vfn" path="res://Environment/Fridge/plastic.png" id="3_ic0uy"]
-[ext_resource type="Texture2D" uid="uid://ghklwqqrlnwa" path="res://BG Assets/UndergroundMine/UM_UndergroundMine_TileSet 16x16.png" id="4_2u3nc"]
+[ext_resource type="Texture2D" uid="uid://ghklwqqrlnwa" path="res://Backgrounds/BG Assets/UndergroundMine/UM_UndergroundMine_TileSet 16x16.png" id="4_2u3nc"]
 [ext_resource type="PackedScene" uid="uid://ccgw73mua125d" path="res://Collectibles/Coin/coin.tscn" id="6_2o6r5"]
-[ext_resource type="Script" uid="uid://7bqodgqop63r" path="res://mobs.gd" id="7_wse8f"]
+[ext_resource type="Script" uid="uid://7bqodgqop63r" path="res://Global/mobs.gd" id="7_wse8f"]
 [ext_resource type="PackedScene" uid="uid://djaqwkrejty4a" path="res://Collectibles/Cheese/cheese.tscn" id="8_gbfbk"]
 [ext_resource type="PackedScene" uid="uid://b1u3ekjxc2lqc" path="res://Collectibles/Jello Packets/jello_packet.tscn" id="9_ioo17"]
-[ext_resource type="PackedScene" uid="uid://bgyouyej2liti" path="res://inventory.tscn" id="11_ic0uy"]
+[ext_resource type="PackedScene" uid="uid://bgyouyej2liti" path="res://Inventory/inventory.tscn" id="11_ic0uy"]
 [ext_resource type="Texture2D" uid="uid://cgqfjj746osvo" path="res://Environment/Fridge/Untitled_Artwork (16).png" id="12_k3n1d"]
-[ext_resource type="PackedScene" uid="uid://b2621pnhxp4kc" path="res://blank_npc.tscn" id="13_2o6r5"]
-[ext_resource type="PackedScene" uid="uid://cx6v5qrdeouvf" path="res://cabin_bg.tscn" id="15_udxuc"]
+[ext_resource type="PackedScene" uid="uid://b2621pnhxp4kc" path="res://NPCs/blank_npc.tscn" id="13_2o6r5"]
+[ext_resource type="PackedScene" uid="uid://cx6v5qrdeouvf" path="res://Backgrounds/cabin_bg.tscn" id="15_udxuc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ic0uy"]
 texture = ExtResource("2_wse8f")

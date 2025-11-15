@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bohe6tjdgbsv0"
-path="res://.godot/imported/QC_TileSet_Stone 16x16.png-37d1c73c05c059bfd8a32c0095e188ae.ctex"
+uid="uid://cu773rx0skquy"
+path="res://.godot/imported/metal thingy.png-3f3170dfe63ef92f1d85542579bdab90.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://BG Assets/QuietCabin/QC_TileSet_Stone 16x16.png"
-dest_files=["res://.godot/imported/QC_TileSet_Stone 16x16.png-37d1c73c05c059bfd8a32c0095e188ae.ctex"]
+source_file="res://Backgrounds/BG Assets/metal thingy.png"
+dest_files=["res://.godot/imported/metal thingy.png-3f3170dfe63ef92f1d85542579bdab90.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0w8wgiusbu11"
-path="res://.godot/imported/UM_TileGround 16x16.png-77b6b1b2faac8dab900826fd62de8bec.ctex"
+uid="uid://cchvwd1bqg5l4"
+path="res://.godot/imported/QC_TileSet_Wood 16x16.png-9fb53057c2d50bc94eba75c4420916fb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://BG Assets/UndergroundMine/UM_TileGround 16x16.png"
-dest_files=["res://.godot/imported/UM_TileGround 16x16.png-77b6b1b2faac8dab900826fd62de8bec.ctex"]
+source_file="res://Backgrounds/BG Assets/QuietCabin/QC_TileSet_Wood 16x16.png"
+dest_files=["res://.godot/imported/QC_TileSet_Wood 16x16.png-9fb53057c2d50bc94eba75c4420916fb.ctex"]
 
 [params]
 
